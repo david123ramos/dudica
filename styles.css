@@ -271,7 +271,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   position: relative;
   display: grid;
   place-items: center;
-  width: min(76vw, 340px);
+  width: min(76vw, 340px, 40dvh);
   margin: 0 auto 26px;
   transform: translateY(var(--intro-y, 0)) scale(.55);
   opacity: 0;
@@ -443,7 +443,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 
 .slide__media {
   position: relative;
-  width: min(100%, 250px);
+  width: min(100%, 250px, 32dvh);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
@@ -928,6 +928,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 }
 .field--select select:invalid { color: var(--ink-soft); }
 
+.form__warn:empty { display: none; }
 .form__warn { margin: 0; min-height: 1.2em; text-align: center; font-size: .9rem; color: var(--danger); font-weight: 700; }
 
 .btn--brownie {
@@ -1088,7 +1089,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 .thanks.is-open .thanks__inner > :nth-child(4) { transition-delay: .7s; }
 .thanks.is-open .thanks__inner > :nth-child(5) { transition-delay: .8s; }
 .thanks.is-open .thanks__inner > :nth-child(6) { transition-delay: 3s; }
-.thanks__art { width: min(84vw, 400px); margin: 0 auto -12px; clip-path: inset(.8%); }
+.thanks__art { width: min(84vw, 400px, 48dvh); margin: 0 auto -12px; clip-path: inset(.8%); }
 .thanks.is-open .thanks__art { animation: float 3s var(--ease-in-out) 1.2s infinite; }
 .thanks__title {
   font-family: var(--font-display);
@@ -1142,7 +1143,66 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 @media (min-width: 768px) {
   :root { --gutter: 32px; }
   .screen { padding-top: 96px; }
-  .slide__media { width: 280px; }
+  .slide__media { width: min(280px, 34dvh); }
+}
+
+@media (max-width: 360px) {
+  :root { --gutter: 16px; }
+  .want { gap: 10px; }
+  .want__btn { padding: 0 14px; font-size: .95rem; }
+  .btn--brownie { font-size: 1.25rem; }
+  .info { padding-right: 44px; }
+  .info__icon { width: 26px; height: 26px; font-size: .95rem; top: 10px; right: 10px; }
+}
+
+@media (max-height: 760px) {
+  .screen { padding-top: calc(env(safe-area-inset-top) + 64px); padding-bottom: calc(env(safe-area-inset-bottom) + 20px); }
+  .splash { padding-top: calc(env(safe-area-inset-top) + 24px); }
+  .splash__brand { margin-bottom: 16px; }
+  .splash__title { font-size: clamp(1.9rem, 9vw, 2.6rem); }
+  .carousel__viewport { padding: 8px 0 16px; }
+  .product { min-height: 0; }
+  .product__name { font-size: 1.7rem; }
+  .product__desc { margin: 4px auto 8px; font-size: .88rem; }
+  .want { margin-top: 18px; }
+  .btn { min-height: 52px; }
+  .want__counter { flex-basis: 52px; width: 52px; height: 52px; }
+  .ticket { margin-top: 12px; }
+  .summary__next { margin-top: 28px; }
+
+  .form-screen { padding-top: calc(env(safe-area-inset-top) + 24px); }
+  .form-screen .screen__title { font-size: clamp(1.55rem, 7vw, 2.1rem); }
+  .mascot { width: 100px; }
+  .form { gap: 10px; margin-top: 14px; }
+  .field__input { padding: 22px 16px 8px; }
+  .field__label { top: 15px; left: 18px; }
+  .field--select::after { top: 22px; }
+  .info__title { margin-top: -12px; }
+  .info__text { font-size: .82rem; }
+  .btn--brownie { min-height: 68px; font-size: 1.3rem; }
+}
+
+@media (max-height: 620px) {
+  .screen { padding-top: calc(env(safe-area-inset-top) + 56px); }
+  .screen__head .screen__title { font-size: 1.6rem; }
+  .screen__sub { font-size: .85rem; margin-top: 2px; }
+  .slide__media { width: min(100%, 250px, 27dvh); }
+  .product__name { font-size: 1.5rem; }
+  .product__desc { font-size: .82rem; line-height: 1.35; }
+  .product__price { font-size: 1.1rem; }
+  .want { margin-top: 12px; }
+
+  body[data-screen="dados"] .minicart { opacity: 0; pointer-events: none; }
+  .form-screen { padding-top: calc(env(safe-area-inset-top) + 16px); }
+  .form-screen .screen__head { display: flex; align-items: center; gap: 12px; text-align: left; }
+  .form-screen .screen__title { font-size: 1.4rem; margin: 0; }
+  .mascot { flex: none; width: 76px; margin: 0; }
+  .form { gap: 8px; margin-top: 10px; }
+  .field__input { padding: 20px 14px 6px; font-size: .95rem; }
+  .field__label { top: 13px; left: 16px; }
+  .field--select::after { top: 19px; }
+  .info__text { font-size: .76rem; line-height: 1.35; margin-bottom: 2px; }
+  .btn--brownie { min-height: 60px; font-size: 1.2rem; padding-bottom: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
