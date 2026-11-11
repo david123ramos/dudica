@@ -369,7 +369,7 @@ function openThanks(origin, url, name) {
   const rect = origin.getBoundingClientRect();
   el.thanks.style.setProperty("--x", `${rect.left + rect.width / 2}px`);
   el.thanks.style.setProperty("--y", `${rect.top + rect.height / 2}px`);
-  el.thanksTitle.textContent = `Obrigado, ${name.trim().split(" ")[0]}!`;
+  el.thanksTitle.textContent = `Obrigada, ${name.trim().split(" ")[0]}!`;
   el.thanksLink.href = url;
   el.thanks.setAttribute("aria-hidden", "false");
   el.thanks.classList.add("is-open");
