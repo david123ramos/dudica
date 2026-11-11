@@ -1,20 +1,47 @@
 [
   {
-    "id": "cookie",
+    "id": "cookietrad",
     "categoria": "cookies",
-    "nome": "Cookie",
+    "nome": "Cookie Tradicional",
     "descricao": "Crocante por fora, macio por dentro e com gotas generosas de chocolate belga.",
     "preco": 8.0,
-    "imagem": "static/cookie.png",
+    "imagem": "static/prods/cookie_tradicional.png",
+    "arte": "cookie"
+  },
+    {
+    "id": "cookieduo",
+    "categoria": "cookies",
+    "nome": "Cookie Dark Duo",
+    "descricao": "Nossa receita de cookie agora com massa de cacau 100% e pedaços de chocolate ao leite e chocolate branco",
+    "preco": 8.0,
+    "imagem": "static/prods/cookie_dark_duo.png",
     "arte": "cookie"
   },
   {
     "id": "redvelvet",
     "categoria": "cookies",
-    "nome": "Red Velvet",
-    "descricao": "Massa aveludada de cacau, gotas de chocolate branco e um toque de cream cheese.",
+    "nome": "Cookie Red Velvet",
+    "descricao": "Massa aveludada de cacau, gotas de chocolate branco e recheio de brigadeiro & cream cheese.",
     "preco": 9.0,
-    "imagem": "static/redvelvet.png",
+    "imagem": "static/prods/cookie_redvelvet.png",
+    "arte": "redvelvet"
+  },
+    {
+    "id": "cookiebueno",
+    "categoria": "cookies",
+    "nome": "Cookie Bueno",
+    "descricao": "Nossa receita de cookie agora com recheio de kinder bueno e gotas de chocolate branco",
+    "preco": 9.0,
+    "imagem": "static/prods/cookie_kinderbueno.png",
+    "arte": "redvelvet"
+  },
+  {
+    "id": "cookienutella",
+    "categoria": "cookies",
+    "nome": "Cookie Nutella",
+    "descricao": "Nossa receita de cookie agora com recheio generoso de Nutella®",
+    "preco": 9.0,
+    "imagem": "static/prods/cookie_nutella.png",
     "arte": "redvelvet"
   },
   {
@@ -23,7 +50,7 @@
     "nome": "Brownie",
     "descricao": "Casquinha craquelada e um miolo úmido, denso e intensamente chocolatudo.",
     "preco": 10.0,
-    "imagem": "static/brownie.png",
+    "imagem": "static/prods/brownie_tradicional.png",
     "arte": "brownie"
   },
   {
@@ -32,7 +59,7 @@
     "nome": "Brookie",
     "descricao": "O melhor dos dois mundos: metade brownie, metade cookie, inteiro amor.",
     "preco": 12.0,
-    "imagem": "static/brookie.png",
+    "imagem": "static/prods/brookie.png",
     "arte": "brookie"
   }
 ]

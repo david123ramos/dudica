@@ -32,6 +32,21 @@ const cartItems = () => state.menu.filter((item) => qtyOf(item.id) > 0);
 const cartCount = () => cartItems().reduce((sum, item) => sum + qtyOf(item.id), 0);
 const cartTotal = () => cartItems().reduce((sum, item) => sum + qtyOf(item.id) * item.preco, 0);
 const artMarkup = (item) => `<div class="art art--${item.arte}"></div>`;
+const photoMarkup = (item, className, alt = "") =>
+  `${artMarkup(item)}<img class="${className}" src="${item.imagem}" alt="${alt}" draggable="false">`;
+
+function bindPhotos(root, selector) {
+  root.querySelectorAll(selector).forEach((img) => {
+    const show = () => img.parentElement.classList.add("has-photo");
+    if (img.complete) {
+      if (img.naturalWidth) show();
+      else img.remove();
+      return;
+    }
+    img.addEventListener("load", show);
+    img.addEventListener("error", () => img.remove());
+  });
+}
 
 function restart(node, className) {
   node.classList.remove(className);
@@ -123,18 +138,11 @@ function createShowcase(section) {
   ui.track.innerHTML = items
     .map((item) => `
       <li class="slide">
-        <div class="slide__media">
-          ${artMarkup(item)}
-          <img class="slide__photo" src="${item.imagem}" alt="${item.nome}" draggable="false">
-        </div>
+        <div class="slide__media">${photoMarkup(item, "slide__photo", item.nome)}</div>
       </li>`)
     .join("");
   ui.pager.innerHTML = items.map(() => "<span></span>").join("");
-
-  ui.track.querySelectorAll(".slide__photo").forEach((img) => {
-    img.addEventListener("load", () => img.parentElement.classList.add("has-photo"));
-    img.addEventListener("error", () => img.remove());
-  });
+  bindPhotos(ui.track, ".slide__photo");
 
   function refresh(animate) {
     const qty = qtyOf(items[index].id);
@@ -213,7 +221,7 @@ function renderSummary() {
   el.list.innerHTML = items
     .map((item, i) => `
       <li class="line" data-id="${item.id}" style="--i:${i}">
-        <div class="line__art">${artMarkup(item)}</div>
+        <div class="line__art">${photoMarkup(item, "line__photo")}</div>
         <div class="line__info">
           <span class="line__name">${item.nome}</span>
           <span class="line__unit">${brl.format(item.preco)} cada</span>
@@ -226,6 +234,7 @@ function renderSummary() {
         <span class="line__total">${brl.format(qtyOf(item.id) * item.preco)}</span>
       </li>`)
     .join("");
+  bindPhotos(el.list, ".line__photo");
 
   el.total._value = 0;
   tween(el.total, cartTotal(), 900);

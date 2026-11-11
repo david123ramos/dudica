@@ -702,8 +702,8 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 }
 .ticket__list {
   min-height: 0;
-  margin: 0 -8px 0 0;
-  padding: 0 8px 0 0;
+  margin: 0 -8px 0 -14px;
+  padding: 0 8px 0 14px;
   list-style: none;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -728,7 +728,9 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   animation-delay: calc(var(--i) * 90ms + 200ms);
 }
 .line.is-leaving { animation: line-out .45s var(--ease-in-out) forwards; }
-.line__art { grid-area: art; display: grid; place-items: center; width: 52px; height: 52px; }
+.line__art { position: relative; grid-area: art; display: grid; place-items: center; width: 52px; height: 52px; }
+.line__photo { position: absolute; inset: -24%; width: 148%; height: 148%; object-fit: contain; filter: drop-shadow(0 3px 4px rgb(0 0 0 / .18)); }
+.line__art.has-photo .art { display: none; }
 .line__art .art { width: 100%; }
 .line__art .art--brownie, .line__art .art--brookie { width: 88%; }
 .line__info { grid-area: info; min-width: 0; }
