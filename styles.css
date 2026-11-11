@@ -1288,7 +1288,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   color: var(--brand-butter);
   text-align: center;
 }
-.footer__logo { width: 84px; }
+.footer__logo { width: min(200px, 56vw); height: auto; }
 .footer__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .footer__link {
   display: inline-flex;
