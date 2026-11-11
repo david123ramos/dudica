@@ -730,7 +730,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 .line {
   display: grid;
   grid-template-columns: 52px 1fr auto;
-  grid-template-areas: "art info total" "art step total";
+  grid-template-areas: "art info info" "art step total";
   column-gap: 14px;
   row-gap: 6px;
   align-items: center;
@@ -746,9 +746,9 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 .line__art .art { width: 100%; }
 .line__art .art--brownie, .line__art .art--brookie { width: 88%; }
 .line__info { grid-area: info; min-width: 0; }
-.line__name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; }
+.line__name { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; line-height: 1.15; }
 .line__unit { display: block; font-size: .8rem; color: var(--ink-soft); }
-.line__total { grid-area: total; font-weight: 700; font-variant-numeric: tabular-nums; }
+.line__total { grid-area: total; justify-self: end; white-space: nowrap; font-weight: 700; font-variant-numeric: tabular-nums; }
 .line__step { grid-area: step; display: flex; align-items: center; gap: 10px; }
 .line__step button {
   width: 30px;
