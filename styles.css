@@ -881,7 +881,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 .field.is-invalid .field__input { border-color: var(--danger); box-shadow: 0 0 0 3px var(--accent); animation: shake .4s var(--ease-out); }
 .field.is-invalid .field__error { max-height: 24px; opacity: 1; margin-top: 6px; }
 
-.info {
+.field__input.info {
   position: relative;
   padding-right: 52px;
   border-style: dashed;
@@ -1176,7 +1176,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   :root { --gutter: 16px; }
   .want__btn { font-size: 1.1rem; }
   .btn--brownie { font-size: 1.25rem; }
-  .info { padding-right: 44px; }
+  .field__input.info { padding-right: 44px; }
   .info__icon { width: 26px; height: 26px; font-size: .95rem; top: 10px; right: 10px; }
 }
 
@@ -1203,8 +1203,8 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 
   .form-screen { padding-top: calc(env(safe-area-inset-top) + 24px); }
   .form-screen .screen__title { font-size: clamp(1.55rem, 7vw, 2.1rem); }
-  .mascot { width: 100px; }
-  .form { gap: 10px; margin-top: 14px; }
+  .mascot { width: 88px; }
+  .form { gap: 8px; margin-top: 12px; }
   .field__input { padding: 22px 16px 8px; }
   .field__label { top: 15px; left: 18px; }
   .field--select::after { top: 22px; }

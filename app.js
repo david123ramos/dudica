@@ -587,7 +587,6 @@ function bindForm() {
   loadCrunch();
   const brownie = $("#brownie-btn");
   brownie.addEventListener("click", () => {
-    playCrunch();
     if (!reducedMotion) spawnCrumbs(brownie);
     restart(brownie, "is-crunched");
   });
@@ -626,6 +625,7 @@ function bindForm() {
     const data = Object.fromEntries(new FormData(el.form));
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(data))}`;
     document.activeElement?.blur();
+    playCrunch();
     mascot.setMood("happy");
     openThanks(e.submitter || el.form, url, data.nome);
   });
