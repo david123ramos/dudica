@@ -1,0 +1,38 @@
+[
+  {
+    "id": "cookie",
+    "categoria": "cookies",
+    "nome": "Cookie",
+    "descricao": "Crocante por fora, macio por dentro e com gotas generosas de chocolate belga.",
+    "preco": 8.0,
+    "imagem": "static/cookie.png",
+    "arte": "cookie"
+  },
+  {
+    "id": "redvelvet",
+    "categoria": "cookies",
+    "nome": "Red Velvet",
+    "descricao": "Massa aveludada de cacau, gotas de chocolate branco e um toque de cream cheese.",
+    "preco": 9.0,
+    "imagem": "static/redvelvet.png",
+    "arte": "redvelvet"
+  },
+  {
+    "id": "brownie",
+    "categoria": "brownies",
+    "nome": "Brownie",
+    "descricao": "Casquinha craquelada e um miolo úmido, denso e intensamente chocolatudo.",
+    "preco": 10.0,
+    "imagem": "static/brownie.png",
+    "arte": "brownie"
+  },
+  {
+    "id": "brookie",
+    "categoria": "brownies",
+    "nome": "Brookie",
+    "descricao": "O melhor dos dois mundos: metade brownie, metade cookie, inteiro amor.",
+    "preco": 12.0,
+    "imagem": "static/brookie.png",
+    "arte": "brookie"
+  }
+]

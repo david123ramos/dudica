@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#734529">
+  <title>Dudica · Cookies, Brownies & Brookies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..900,100&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=7">
+</head>
+<body>
+  <nav class="dots" aria-label="Progresso">
+    <button class="dots__item" data-target="inicio" aria-label="Início"></button>
+    <button class="dots__item" data-target="cookies" aria-label="Cookies"></button>
+    <button class="dots__item" data-target="brownies" aria-label="Brownies"></button>
+    <button class="dots__item" data-target="resumo" aria-label="Resumo"></button>
+    <button class="dots__item" data-target="dados" aria-label="Seus dados"></button>
+  </nav>
+
+  <button class="minicart" id="minicart" aria-label="Ver resumo do pedido">
+    <span class="minicart__icon" aria-hidden="true"><span class="minicart__badge" id="minicart-count">0</span></span>
+    <span class="minicart__total" id="minicart-total">R$ 0,00</span>
+  </button>
+
+  <main class="feed" id="feed">
+    <section class="screen splash" id="inicio" data-stage="idle">
+      <div class="splash__chips" aria-hidden="true">
+        <i style="--tx:-36vw;--ty:-31vh;--r:24deg;--d:0;--s:18px"></i>
+        <i style="--tx:28vw;--ty:-36vh;--r:-40deg;--d:60;--s:12px"></i>
+        <i style="--tx:39vw;--ty:-14vh;--r:60deg;--d:120;--s:20px"></i>
+        <i style="--tx:-41vw;--ty:-8vh;--r:-12deg;--d:40;--s:11px"></i>
+        <i style="--tx:-27vw;--ty:21vh;--r:50deg;--d:100;--s:15px"></i>
+        <i style="--tx:36vw;--ty:16vh;--r:-60deg;--d:160;--s:13px"></i>
+        <i style="--tx:-8vw;--ty:-42vh;--r:80deg;--d:80;--s:10px"></i>
+        <i style="--tx:12vw;--ty:37vh;--r:10deg;--d:140;--s:17px"></i>
+        <i style="--tx:-38vw;--ty:39vh;--r:-30deg;--d:180;--s:14px"></i>
+        <i style="--tx:41vw;--ty:42vh;--r:36deg;--d:20;--s:19px"></i>
+        <i style="--tx:-18vw;--ty:-24vh;--r:-20deg;--d:200;--s:9px"></i>
+        <i style="--tx:22vw;--ty:-22vh;--r:30deg;--d:90;--s:8px"></i>
+        <i style="--tx:-42vw;--ty:30vh;--r:70deg;--d:130;--s:9px"></i>
+        <i style="--tx:30vw;--ty:30vh;--r:-50deg;--d:110;--s:10px"></i>
+      </div>
+
+      <div class="splash__brand">
+        <span class="splash__halo" aria-hidden="true"></span>
+        <div class="splash__mark">
+          <img class="splash__logo" src="static/logo-dudica.png" alt="Dudica">
+          <span class="splash__shine" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <h1 class="splash__title" data-intro style="--i:0">Peça seu <em>docinho.</em></h1>
+      <p class="splash__text" data-intro style="--i:1">Cookies, brownies e brookies fresquinhos, do forno direto pra você.</p>
+      <div class="hint" data-intro style="--i:3" aria-hidden="true">
+        <span class="hint__chevron"></span>
+        <span>deslize pra cima</span>
+      </div>
+    </section>
+
+    <section class="screen menu menu--cookies" id="cookies" data-showcase="cookies">
+      <header class="screen__head" data-reveal style="--i:0">
+        <h2 class="screen__title">Cookies</h2>
+        <p class="screen__sub">crocantes por fora, macios por dentro</p>
+      </header>
+    </section>
+
+    <section class="screen menu menu--brownies" id="brownies" data-showcase="brownies">
+      <header class="screen__head" data-reveal style="--i:0">
+        <h2 class="screen__title">Brownies</h2>
+        <p class="screen__sub">úmidos, densos e muito chocolatudos</p>
+      </header>
+    </section>
+
+    <section class="screen summary" id="resumo">
+      <header class="screen__head" data-reveal style="--i:0">
+        <p class="eyebrow">seu pedido</p>
+        <h2 class="screen__title">Resumo</h2>
+      </header>
+
+      <div class="ticket" data-reveal style="--i:1">
+        <ul class="ticket__list" id="summary-list"></ul>
+        <div class="empty">
+          <div class="sad-cookie" aria-hidden="true">
+            <span class="sad-cookie__eye"></span><span class="sad-cookie__eye"></span>
+            <span class="sad-cookie__mouth"></span><span class="sad-cookie__tear"></span>
+          </div>
+          <p class="empty__title">Você ainda não escolheu nenhum docinho…</p>
+          <button class="btn btn--ghost" data-goto="cookies">ver cardápio</button>
+        </div>
+        <footer class="ticket__total">
+          <span>Total</span>
+          <strong id="summary-total">R$ 0,00</strong>
+        </footer>
+      </div>
+      <button class="btn btn--dark summary__next" data-goto="dados" data-reveal style="--i:2">tudo certo, continuar</button>
+    </section>
+
+    <section class="screen form-screen" id="dados">
+      <header class="screen__head" data-reveal style="--i:0">
+        <div class="mascot" id="mascot" data-mood="idle" aria-hidden="true">
+          <svg class="mascot__svg" viewBox="0 0 296 274">
+            <path class="mascot__lines" fill-rule="evenodd" d="M159.1 13.8L160.7 13.8L162.3 14.4L163.5 17.2L162.4 19.2L159.2 21.2L156.8 23.8L155.1 28.1L154.3 31.8L154.3 40.2L155.6 43.9L158.4 47.6L158.5 49.2L157.6 50.8L155.6 51.6L152.9 50.6L150.3 47.4L148.5 43L147.8 35.3L149.9 23.6L146.7 25.4L142.9 28.9L140.3 32.6L138.3 37.8L137.8 43L139.3 49.4L143.4 55.8L148.7 60.8L149 62.2L148.6 63.1L144.1 62.4L139.2 59.6L136.1 55.9L133.2 49.8L132.2 49L113.5 52.3L102.6 55.6L95.3 58.6L85.8 63.6L70.9 73.9L64.4 79.4L58.4 85.4L49.8 97.6L44.1 109.3L40.3 120.5L33.8 144.8L31.7 159L28.9 169.2L26.2 176.2L22.4 183.7L15.6 194.1L13.1 198.8L10.5 208L10.5 218.7L11.3 223L13.1 227.4L15.1 230.2L21.4 236.1L25.1 238.7L29.5 240.5L39 241.2L44.6 240.9L41.1 234.9L40 231.2L40 227.3L40.6 225.1L41.3 224.1L42.7 223.8L43.9 224.6L44.8 229.9L46.9 234.3L50.4 238.1L56.6 241.7L57.5 242.8L58 244.5L57.3 246.3L55.5 247.5L36.5 247.7L29 247.2L25.3 246.2L17.4 241.3L10.2 234.3L6.1 227.4L3.8 218.7L3.8 210L5.3 201.1L8.8 192.8L17.2 179.4L22.4 167.7L26 154.2L26 149.3L27 143.5L32.8 122L37.1 108.6L42.1 98.3L48.3 88.3L55.7 79.2L63.7 71.4L72.3 64.6L86.1 55.8L99.1 49.8L112 46L131.7 42.9L132 36.3L133.3 32.3L135.3 28.8L139.3 23.8L143.4 19.9L146.6 17.8L151.8 15.6ZM166.3 39.8L177.5 40L186.7 41.5L192.7 43.1L204.7 47.6L213.9 52.3L224.9 59.1L240.6 70.4L245.3 75.4L255.2 89.1L262.2 102.6L266.7 116L271.5 140.5L275.8 156.2L280.3 168.7L293.5 199.5L295.5 208.5L295.7 217.7L293.9 227.4L289.9 236.7L286.8 241.3L281.2 246.7L275.4 249.9L265.6 253.1L260.2 255.4L256 256.7L250.8 257L247.2 255.3L246.8 252.3L247.9 250.7L252.1 247.8L253.6 246.1L256.9 239.7L258.8 228.8L260.3 227.3L261.8 226.8L264.8 227.7L266.2 230.3L266 238.5L264.1 245.1L270.9 243.4L277.6 239.6L281.4 235.4L284.4 229.9L286.2 224L287.3 216L286.7 207.5L285.4 201.8L273.3 173.4L266.3 152.7L262.8 139L259.2 120L255.4 107.6L250.2 96.8L244.2 87.3L237.4 79.3L231.6 74.2L211.7 60.8L196.7 53.3L182.5 48.8L161.8 44.4L160.8 42.7L161.3 41.3L162.5 40.5ZM180.1 87.3L182.1 88.2L185.9 93.8L190.4 101.3L192.9 106.8L195.2 116L195.2 119L193.6 121.6L191.8 122L190.3 120.7L186.4 106.6L179.1 91.2L178.8 88.5ZM119.1 97.3L120.9 97.3L121.9 98.8L120.3 107.8L120 117.5L121 124.7L123.1 131.7L128.1 141.7L134.9 150.8L139.8 154.7L145.9 157.6L148.4 159.6L149 161L148.7 163.2L147.7 164.4L145.5 165L140.3 163.4L134.6 160.4L128.1 154.4L122.1 146.7L116.8 136.2L114 125.5L113.5 114.5L115.3 103.6L116.8 99.8ZM154.1 109.1L155.8 109.4L156.5 110.8L156.5 115.7L157.8 126L160.3 135.2L162.1 138.7L165.4 143.3L175.7 152.6L175.7 155.4L174.6 156.8L173.3 157.3L171.3 157.2L168.3 155.4L160.6 148.4L156.8 143.4L153.8 137.4L151.5 128L151.3 118.3L152 112.3L152.8 110.1ZM80.8 111.6L82.4 111.6L83.5 113.2L78.3 121.1L75.5 127.8L73.8 137L74 145.7L75.3 152.7L77.8 158.8L79.9 161.8L84.1 165.9L86.3 169.9L97 167.8L105.2 167.8L117.7 169L128.5 171.3L138.7 174.8L140.8 176.2L146.3 181.7L152 180.5L155.2 180.5L161.8 182.2L164.2 178.2L165.8 176.8L180.8 171L203.3 167.8L215 168L229 170.5L230.2 169.4L231.1 165.8L232.3 165.3L234.1 165.7L236.4 171.3L237.8 172L240.5 172L241.4 172.8L242.2 175.5L242.7 182L241.9 183.4L238.8 184.1L238 184.8L239 193.8L239 202.2L238 210.7L236 219.5L232.9 226.7L227.3 234.3L220.1 241.8L211.9 247.9L200.4 254.2L193.5 256.7L184.2 258.2L161.3 259.5L158.8 257.9L158.6 255.1L160.6 253.1L165 252L172.7 251.7L188.7 249.7L193.9 248.2L201.4 244.7L209.3 239.6L215.6 234.3L221.6 227.8L225.4 222.2L227.4 217.4L227.8 214.3L226.1 215.8L223.7 221.7L221.2 224.4L216.2 226.7L213.8 227L210.7 226.3L203.7 224.8L186.3 222.7L180.3 220.9L175.8 218.7L172.2 216.1L168.4 212.3L164.6 206.7L159.8 195L159.1 187.9L155.7 186.8L149.3 186.3L148.2 186.9L147.6 188.3L147 193L144.7 200.2L141.7 205.9L136.8 212.8L130.7 218.7L125.9 221.4L121.7 222.9L116.7 223.7L105.5 223.7L101 223.3L97.7 225.2L95 226L89.3 225.7L85.8 224.4L82.4 221.8L80.6 218.9L78.9 213.1L75.8 209.2L75.5 209.5L77 218.2L80.3 226.4L84.9 232.8L90.2 237.3L98.8 242.2L113 247.5L129 251.7L141.7 252.8L143.2 253.8L144 255.3L144 257.2L143.1 258.8L141.2 259.7L136.3 260L128 259.2L120.3 257.5L104.3 252.4L96.8 249.4L89.8 245.9L83.2 241.3L76.3 233.7L71.3 223.9L69.5 218.2L68.5 212.5L68.5 204.8L70 197L70 192.5L69.2 190.1L67.3 187.2L65.7 185.8L62.7 184.6L62 183.2L62.3 176.6L63.6 175.6L65.7 175.5L66.5 174.7L65.8 167L67.8 156L66.8 145.7L66.8 138.5L68.3 129.8L70.3 124.1L74.1 117.6L77.7 113.4ZM231.8 113.3L234 113.5L235.9 115.3L238 122.3L238.5 129.5L236.7 140.2L233 149.5L228.6 156.3L221.8 162.8L216.3 165.3L212.9 165.1L212 163.5L212.3 162.1L217.8 158.3L222.3 153.6L226.4 147.7L229.5 140.5L232 128.3L229.8 116L230.4 114.2ZM71.2 162.6L71.3 168.7L72.6 173.9L77.2 172.7L78.9 171.8ZM203.5 173.3L193 174.5L182.8 174.8L168.6 179.8L166.5 181.5L164 189L164.5 194L166.3 199.4L170.6 207.2L175.2 212.3L179.3 215.2L184.8 217.4L191.3 218.7L197.3 219.2L199 219L198 214.7L198 212.5L198.6 211.3L201.9 207.7L206.1 205.3L209.8 204.3L216 204L219.4 205.1L221.4 206.6L223.2 208.8L223.8 208.8L229.4 198.4L230.2 195.5L230 182.8L228.6 178.9L220.9 175.3L216.5 174L211.5 173.3ZM92.3 173.8L85.8 174.8L81.8 176.5L78.6 178.8L76.1 182.1L75.8 184L76.8 189.3L76.3 199L77.6 202.9L81.8 207.2L85.1 205.3L90.3 204L94.2 204.3L96.7 205.3L101.4 210.3L103.1 216.4L103.8 217.2L110 217.7L120.5 216.5L124.2 215.2L129.8 211.8L133.6 208.3L136.7 203.9L139.7 197.4L141.5 191L142 188L140.9 184.6L138.3 181.7L134.7 179.1L129.9 176.8L125.5 175.5L114.5 174ZM89.5 205.5L83.8 207.6L83.3 208.3L83.4 209.1L88.1 212.4L96.6 215.7L101 216.7L101.7 216.4L100.9 213.1L98.9 209.3L94.9 206.1ZM212 205.5L205.1 207.3L202.1 209.6L200.1 212.6L199.8 215.2L201.3 218.7L208.3 217.8L213.9 215.9L220.1 212.1L221.4 210.4L221.2 208.3L218.7 206.3L216.7 205.5ZM63.1 212.6L64.7 212.5L66.1 213.4L67.9 217.8L68.5 221L67.8 227.5L68 231L70 237.3L72.4 239.6L72.2 242.2L70.7 243.2L68.3 243.2L61.1 240.7L56.7 237.8L51.8 232.2L49.6 227.4L48.3 222.7L48.4 221.4L50 220.8L51.4 222.1L54.6 228.4L57.1 231.6L62.3 235.7L63.6 235.7L62.5 229L63 220.3L61.8 215.7L61.8 213.8ZM81.4 215.4L81.5 217.7L82.6 219.9L85.5 222.5L91.3 224.7L94 224.7L97.3 223.6L98.6 222.8L89.8 220.4ZM223.4 217.4L215.7 222.2L207.3 224L207.7 224.3L214.7 225L218.7 223.9L221.8 221.6ZM239.6 220.3L241.2 220.5L241.7 221.5L242 229.5L240.6 236.9L242.8 236.3L246.1 234.1L248.4 231.2L249.9 227.7L251.1 226.6L252.5 226.3L254.7 227.6L255 230L253.9 233.9L251.6 237.3L246.9 240.9L243.5 242.5L240.2 243.2L236.3 243.3L232.8 244.2L231.1 243.4L230.5 242L230.8 240.6L234.8 237.1L236.7 233.9L237.7 230L238.5 222Z"/>
+            <path class="mascot__brow mascot__brow--l" d="M94 161 Q105 150 116 157"/>
+            <path class="mascot__brow mascot__brow--r" d="M184 165 Q195 154 206 162"/>
+            <g class="mascot__eye mascot__eye--l">
+              <g class="mascot__look">
+                <g class="mascot__open">
+                  <ellipse cx="106" cy="193" rx="9.5" ry="14"/>
+                  <circle class="mascot__shine" cx="102.5" cy="186" r="2.8"/>
+                </g>
+              </g>
+              <path class="mascot__happy" d="M96 198 Q106 184 116 198"/>
+            </g>
+            <g class="mascot__eye mascot__eye--r">
+              <g class="mascot__look">
+                <g class="mascot__open">
+                  <ellipse cx="197" cy="192" rx="9.5" ry="14"/>
+                  <circle class="mascot__shine" cx="193.5" cy="185" r="2.8"/>
+                </g>
+              </g>
+              <path class="mascot__happy" d="M187 197 Q197 183 207 197"/>
+              <path class="mascot__wink" d="M207 185 Q195 189 187 192 Q195 195 207 199"/>
+            </g>
+            <path class="mascot__mouth mascot__mouth--smile" d="M132 225 Q151 240 171 225"/>
+            <path class="mascot__mouth mascot__mouth--grin" d="M133 224 Q151 248 169 224 Q151 230 133 224 Z"/>
+            <g class="mascot__mouth mascot__mouth--tongue">
+              <path d="M132 226 Q151 237 171 226"/>
+              <path class="mascot__tongue" d="M148 232 Q148 244 155 243 Q161 242 159 231"/>
+            </g>
+            <ellipse class="mascot__mouth mascot__mouth--o" cx="151" cy="230" rx="5.5" ry="6.5"/>
+            <path class="mascot__mouth mascot__mouth--sad" d="M137 235 Q151 223 165 235"/>
+          </svg>
+        </div>
+        <h2 class="screen__title">Para onde vai o seu docinho?</h2>
+      </header>
+
+      <form class="form" id="form" novalidate data-reveal style="--i:1">
+        <label class="field">
+          <input class="field__input" name="nome" autocomplete="name" placeholder=" " required>
+          <span class="field__label">Nome</span>
+          <span class="field__error">Conta pra gente seu nome</span>
+        </label>
+        <label class="field">
+          <input class="field__input" name="telefone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder=" " required>
+          <span class="field__label">Telefone</span>
+          <span class="field__error">Informe um telefone com DDD</span>
+        </label>
+        <label class="field field--select">
+          <select class="field__input" name="data" required>
+            <option value="" disabled selected>Escolha uma data</option>
+          </select>
+          <span class="field__label">Data de entrega</span>
+          <span class="field__error">Escolha uma data de entrega</span>
+        </label>
+        <div class="field">
+          <div class="field__input info" role="note">
+            <span class="info__icon" aria-hidden="true">!</span>
+            <strong class="info__title">Como funciona a sua entrega</strong>
+            <p class="info__text">As entregas são feitas via Uber Flash ou 99Entregas, somente nas datas disponíveis. Avisaremos quando tudo estiver prontinho e você solicita a corrida. Se escolher retirar, é só combinar o horário com a gente!</p>
+          </div>
+        </div>
+
+        <p class="form__warn" id="form-warn" role="alert"></p>
+
+        <button class="btn btn--brownie" id="brownie-btn" type="submit">
+          <svg class="brownie" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <filter id="brownie-rough" x="-5%" y="-15%" width="110%" height="130%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="2" seed="4"/>
+                <feDisplacementMap in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+              </filter>
+              <filter id="brownie-crackle" x="0" y="0" width="100%" height="100%">
+                <feTurbulence type="turbulence" baseFrequency="0.03 0.11" numOctaves="2" seed="12" result="noise"/>
+                <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.16  0 0 0 0 0.10  0 0 0 0 0.09  -7 0 0 0 1.05" result="cracks"/>
+                <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 0.93  0 0 0 0 0.71  -7 0 0 0 0.5" result="light"/>
+                <feOffset in="light" dy="1.4" result="lightShift"/>
+                <feComposite in="lightShift" in2="cracks" operator="out" result="edge"/>
+                <feMerge><feMergeNode in="edge"/><feMergeNode in="cracks"/></feMerge>
+              </filter>
+              <linearGradient id="brownie-side" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" class="brownie__side-a"/>
+                <stop offset="1" class="brownie__side-b"/>
+              </linearGradient>
+              <linearGradient id="brownie-top" x1="0" y1="0" x2="0.25" y2="1">
+                <stop offset="0" class="brownie__top-a"/>
+                <stop offset=".55" class="brownie__top-b"/>
+                <stop offset="1" class="brownie__top-c"/>
+              </linearGradient>
+              <clipPath id="brownie-top-clip"><rect x="6" y="5" width="308" height="54" rx="22"/></clipPath>
+            </defs>
+            <g filter="url(#brownie-rough)">
+              <rect x="6" y="14" width="308" height="60" rx="22" fill="url(#brownie-side)"/>
+              <rect x="6" y="5" width="308" height="54" rx="22" fill="url(#brownie-top)"/>
+              <g clip-path="url(#brownie-top-clip)">
+                <rect x="0" y="0" width="320" height="60" fill="#000" filter="url(#brownie-crackle)"/>
+                <ellipse cx="120" cy="16" rx="96" ry="9" fill="#fff" opacity=".14"/>
+                <ellipse class="brownie__chunk" cx="34" cy="40" rx="5" ry="3.5"/>
+                <ellipse class="brownie__chunk" cx="282" cy="22" rx="4" ry="3"/>
+                <ellipse class="brownie__chunk" cx="250" cy="46" rx="3" ry="2.2"/>
+                <ellipse class="brownie__chunk" cx="62" cy="15" rx="3" ry="2"/>
+              </g>
+            </g>
+          </svg>
+          <span class="brownie__label">quero meus doces!</span>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <template id="showcase">
+    <div class="carousel" data-reveal style="--i:1">
+      <button class="carousel__arrow carousel__arrow--prev" aria-label="Produto anterior"></button>
+      <div class="carousel__viewport">
+        <ul class="carousel__track"></ul>
+      </div>
+      <button class="carousel__arrow carousel__arrow--next" aria-label="Próximo produto"></button>
+    </div>
+
+    <div class="product" data-reveal style="--i:2" aria-live="polite">
+      <h3 class="product__name"></h3>
+      <p class="product__desc"></p>
+      <p class="product__price"></p>
+    </div>
+
+    <div class="pager" aria-hidden="true"></div>
+
+    <div class="want" data-reveal style="--i:3">
+      <button class="btn btn--primary want__btn">
+        <span class="want__label">quero um desse!</span>
+      </button>
+      <div class="want__counter" aria-live="polite">
+        <span class="want__num">0</span>
+      </div>
+    </div>
+  </template>
+
+  <div class="thanks" id="thanks" aria-hidden="true" role="dialog" aria-label="Obrigado">
+    <div class="thanks__inner">
+      <img class="thanks__art" src="static/final.jpeg" alt="Dudica piscando para você">
+      <div class="thanks__hearts" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <h2 class="thanks__title" id="thanks-title">Obrigado!</h2>
+      <p class="thanks__text">Seu pedido está indo pro nosso WhatsApp…</p>
+      <div class="thanks__bar"><span></span></div>
+      <a class="thanks__fallback" id="thanks-link" href="#">não abriu? toque aqui</a>
+    </div>
+  </div>
+
+  <script src="app.js?v=5" defer></script>
+</body>
+</html>
