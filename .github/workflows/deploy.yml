@@ -1,0 +1,43 @@
+name: Publicar site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Carimbar versão nos arquivos
+        run: |
+          VERSION="${GITHUB_SHA::8}"
+          sed -i -E "s/\?v=[A-Za-z0-9]+/?v=${VERSION}/g" index.html
+          sed -i -E "s/^const BUILD = \"[^\"]*\";/const BUILD = \"${VERSION}\";/" app.js
+          printf '{"build":"%s"}\n' "$VERSION" > version.json
+          grep -q "const BUILD = \"${VERSION}\";" app.js
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude '.gitignore' --exclude '_site' ./ _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

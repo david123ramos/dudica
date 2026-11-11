@@ -1,4 +1,16 @@
 {
+  "whatsapp": "5581988161268",
+  "instagram": "dudicacookies",
+  "regioesAtendidas": ["Paulista", "Abreu e Lima", "Igarassu"],
+  "estado": "PE",
+  "textos": {
+    "entrega": "As entregas são feitas via Uber Flash ou 99Entregas, somente nas datas disponíveis. Avisaremos quando tudo estiver prontinho e você solicita a corrida. Se escolher retirar, é só combinar o horário com a gente!",
+    "saudacaoPedido": "Olá, Dudica! 🍪 Quero fazer um pedido:",
+    "esgotado": "esgotado por enquanto"
+  },
+  "estatisticas": {
+    "goatcounter": ""
+  },
   "datasEntrega": [
     "2026-11-14",
     "2026-11-15",

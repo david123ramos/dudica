@@ -1,13 +1,23 @@
-const WHATSAPP_NUMBER = "5581988161268";
+const BUILD = "dev";
 const OVERLAY_DURATION = 3400;
 const INTRO_LOGO_HOLD = 1700;
+const SWIPE_LEARNED_KEY = "dudica:swipe-aprendido";
+const RELOADED_KEY = "dudica:recarregado";
 
 const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const $ = (selector, root = document) => root.querySelector(selector);
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const versioned = (url) => (BUILD === "dev" ? url : `${url}${url.includes("?") ? "&" : "?"}v=${BUILD}`);
 
-const state = { menu: [], cart: {}, screen: "inicio", sent: false, showcases: [] };
+const store = (area) => ({
+  get: (key) => { try { return area().getItem(key); } catch { return null; } },
+  set: (key, value) => { try { area().setItem(key, value); } catch {} },
+});
+const local = store(() => localStorage);
+const session = store(() => sessionStorage);
+
+const state = { menu: [], config: {}, cart: {}, screen: "inicio", sent: false, showcases: [], seen: new Set() };
 
 const el = {
   feed: $("#feed"),
@@ -23,6 +33,7 @@ const el = {
   thanks: $("#thanks"),
   thanksTitle: $("#thanks-title"),
   thanksLink: $("#thanks-link"),
+  thanksOrder: $("#thanks-order"),
   template: $("#showcase"),
   mascotRoot: $("#mascot"),
 };
@@ -33,7 +44,18 @@ const cartCount = () => cartItems().reduce((sum, item) => sum + qtyOf(item.id), 
 const cartTotal = () => cartItems().reduce((sum, item) => sum + qtyOf(item.id) * item.preco, 0);
 const artMarkup = (item) => `<div class="art art--${item.arte}"></div>`;
 const photoMarkup = (item, className, alt = "") =>
-  `${artMarkup(item)}<img class="${className}" src="${item.imagem}" alt="${alt}" draggable="false">`;
+  `${artMarkup(item)}<img class="${className}" src="${versioned(item.imagem)}" alt="${alt}" draggable="false">`;
+const isSoldOut = (item) => item.disponivel === false;
+
+function track(event) {
+  window.goatcounter?.count?.({ path: event, title: event, event: true });
+}
+
+function trackOnce(event) {
+  if (state.seen.has(event)) return;
+  state.seen.add(event);
+  track(event);
+}
 
 function bindPhotos(root, selector) {
   root.querySelectorAll(selector).forEach((img) => {
@@ -66,7 +88,7 @@ function spawnHearts(target, amount = 4) {
   }
 }
 
-function enableSwipe(area, getIndex, count, goTo) {
+function enableSwipe(area, getIndex, count, goTo, onSwipe) {
   let startX = 0;
   let startY = 0;
   let startTime = 0;
@@ -106,7 +128,10 @@ function enableSwipe(area, getIndex, count, goTo) {
     const velocity = Math.abs(dx) / (performance.now() - startTime);
     area.classList.remove("is-dragging");
     area.style.setProperty("--drag", "0px");
-    if (Math.abs(dx) > area.offsetWidth * 0.18 || velocity > 0.5) goTo(getIndex() + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > area.offsetWidth * 0.18 || velocity > 0.5) {
+      goTo(getIndex() + (dx < 0 ? 1 : -1));
+      onSwipe?.();
+    }
     axis = null;
   };
 
@@ -137,16 +162,26 @@ function createShowcase(section) {
 
   ui.track.innerHTML = items
     .map((item) => `
-      <li class="slide">
-        <div class="slide__media">${photoMarkup(item, "slide__photo", item.nome)}</div>
+      <li class="slide${isSoldOut(item) ? " is-soldout" : ""}">
+        <div class="slide__media">
+          ${photoMarkup(item, "slide__photo", item.nome)}
+          ${isSoldOut(item) ? '<span class="slide__stamp">esgotado</span>' : ""}
+        </div>
       </li>`)
     .join("");
   ui.pager.innerHTML = items.map(() => "<span></span>").join("");
   bindPhotos(ui.track, ".slide__photo");
 
   function refresh(animate) {
-    const qty = qtyOf(items[index].id);
-    const label = qty > 0 ? "quero mais um desse!" : "quero um desse!";
+    const item = items[index];
+    const soldOut = isSoldOut(item);
+    const qty = qtyOf(item.id);
+    const label = soldOut
+      ? state.config.textos?.esgotado ?? "esgotado por enquanto"
+      : qty > 0 ? "quero mais um desse!" : "quero um desse!";
+
+    ui.want.disabled = soldOut;
+    ui.want.parentElement.classList.toggle("is-soldout", soldOut);
     if (ui.label.textContent !== label) {
       ui.label.textContent = label;
       restart(ui.label, "is-changing");
@@ -154,6 +189,15 @@ function createShowcase(section) {
     ui.num.textContent = qty;
     if (animate) restart(ui.num, "is-pop");
   }
+
+  function hint() {
+    if (items.length < 2 || reducedMotion) return;
+    restart(ui.swipe, "is-hinting");
+  }
+
+  ui.swipe.addEventListener("animationend", (e) => {
+    if (e.target === ui.swipe && e.animationName === "swipe-hint") ui.swipe.classList.remove("is-hinting");
+  });
 
   function goTo(target, animate = true) {
     const next = Math.max(0, Math.min(items.length - 1, target));
@@ -177,16 +221,27 @@ function createShowcase(section) {
   ui.prev.addEventListener("click", () => goTo(index - 1));
   ui.next.addEventListener("click", () => goTo(index + 1));
   ui.want.addEventListener("click", () => {
-    const { id } = items[index];
-    state.cart[id] = qtyOf(id) + 1;
+    const item = items[index];
+    if (isSoldOut(item)) return;
+    state.cart[item.id] = qtyOf(item.id) + 1;
     refresh(true);
     spawnHearts(ui.counter);
     updateCart();
+    track(`adicionou/${item.id}`);
   });
-  enableSwipe(ui.swipe, () => index, items.length, goTo);
+  enableSwipe(ui.swipe, () => index, items.length, goTo, () => local.set(SWIPE_LEARNED_KEY, "1"));
 
   goTo(0, false);
-  return { id: section.id, step: (delta) => goTo(index + delta), refresh: () => refresh(false) };
+  return { id: section.id, hinted: false, hint, step: (delta) => goTo(index + delta), refresh: () => refresh(false) };
+}
+
+function maybeHintSwipe(id) {
+  const showcase = state.showcases.find((s) => s.id === id);
+  if (!showcase || showcase.hinted || local.get(SWIPE_LEARNED_KEY)) return;
+  showcase.hinted = true;
+  setTimeout(() => {
+    if (state.screen === id && !local.get(SWIPE_LEARNED_KEY)) showcase.hint();
+  }, 1400);
 }
 
 function updateCart() {
@@ -277,6 +332,8 @@ function setScreen(id) {
   document.querySelectorAll(".dots__item").forEach((d) => d.classList.toggle("is-active", d.dataset.target === id));
   if (id === "resumo") renderSummary();
   if (id === "dados") setTimeout(() => mascot.setMood("wink", 1200), 700);
+  if (id !== "inicio") trackOnce(`viu/${id}`);
+  maybeHintSwipe(id);
   syncMinicart();
 }
 
@@ -346,14 +403,21 @@ function validate() {
   return firstInvalid;
 }
 
-function buildMessage(data) {
+function orderNumber(date = new Date()) {
+  const pad = (n) => String(n).padStart(2, "0");
+  const suffix = Math.random().toString(36).slice(2, 4).toUpperCase();
+  return `${pad(date.getDate())}${pad(date.getMonth() + 1)}-${pad(date.getHours())}${pad(date.getMinutes())}-${suffix}`;
+}
+
+function buildMessage(data, number) {
   const lines = cartItems().map((item) => {
     const qty = qtyOf(item.id);
     return `• ${qty}x ${item.nome} (${brl.format(item.preco)}) — ${brl.format(qty * item.preco)}`;
   });
 
   return [
-    "Olá, Dudica! 🍪 Quero fazer um pedido:",
+    `*Pedido #${number}*`,
+    state.config.textos?.saudacaoPedido ?? "Olá, Dudica! Quero fazer um pedido:",
     "",
     ...lines,
     "",
@@ -365,11 +429,12 @@ function buildMessage(data) {
   ].join("\n");
 }
 
-function openThanks(origin, url, name) {
+function openThanks(origin, url, name, number) {
   const rect = origin.getBoundingClientRect();
   el.thanks.style.setProperty("--x", `${rect.left + rect.width / 2}px`);
   el.thanks.style.setProperty("--y", `${rect.top + rect.height / 2}px`);
   el.thanksTitle.textContent = `Obrigada, ${name.trim().split(" ")[0]}!`;
+  el.thanksOrder.textContent = `Pedido #${number}`;
   el.thanksLink.href = url;
   el.thanks.setAttribute("aria-hidden", "false");
   el.thanks.classList.add("is-open");
@@ -541,7 +606,7 @@ function loadCrunch() {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   if (!AudioCtx || crunch.ctx) return;
   crunch.ctx = new AudioCtx();
-  fetch(CRUNCH_SRC)
+  fetch(versioned(CRUNCH_SRC))
     .then((response) => response.arrayBuffer())
     .then((data) => crunch.ctx.decodeAudioData(data))
     .then((buffer) => { crunch.buffer = buffer; })
@@ -623,15 +688,19 @@ function bindForm() {
     }
 
     const data = Object.fromEntries(new FormData(el.form));
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(data))}`;
+    const number = orderNumber();
+    const url = `https://wa.me/${state.config.whatsapp}?text=${encodeURIComponent(buildMessage(data, number))}`;
     document.activeElement?.blur();
     playCrunch();
     mascot.setMood("happy");
-    openThanks(e.submitter || el.form, url, data.nome);
+    track("pedido-enviado");
+    openThanks(e.submitter || el.form, url, data.nome, number);
   });
 
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && state.sent) setTimeout(closeThanks, 600);
+    if (document.visibilityState !== "visible") return;
+    if (state.sent) setTimeout(closeThanks, 600);
+    else if (cartCount() === 0) checkForUpdate();
   });
 }
 
@@ -660,18 +729,89 @@ function bindEvents() {
   bindMascot();
 }
 
+function listText(items) {
+  return items.length > 1 ? `${items.slice(0, -1).join(", ")} e ${items.at(-1)}` : items[0] ?? "";
+}
+
+function renderFooter({ instagram, whatsapp, regioesAtendidas = [], estado }) {
+  const regions = listText(regioesAtendidas);
+  $("#footer-regioes").textContent = estado && regions ? `${regions} (${estado})` : regions;
+  $("#footer-year").textContent = new Date().getFullYear();
+
+  const ig = $("#footer-instagram");
+  ig.hidden = !instagram;
+  if (instagram) {
+    ig.href = `https://instagram.com/${instagram}`;
+    $(".footer__handle", ig).textContent = `@${instagram}`;
+  }
+  const wa = $("#footer-whatsapp");
+  wa.hidden = !whatsapp;
+  if (whatsapp) wa.href = `https://wa.me/${whatsapp}`;
+}
+
+function loadStats(code) {
+  if (!code || BUILD === "dev") return;
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = "https://gc.zgo.at/count.js";
+  script.dataset.goatcounter = `https://${code}.goatcounter.com/count`;
+  document.head.append(script);
+}
+
+function applyConfig(config) {
+  state.config = config;
+  renderDates(config.datasEntrega ?? []);
+  if (config.textos?.entrega) $(".info__text").textContent = config.textos.entrega;
+  renderFooter(config);
+  loadStats(config.estatisticas?.goatcounter);
+}
+
+function showMenuError() {
+  document.querySelectorAll("[data-showcase]").forEach((section) => {
+    const box = document.createElement("div");
+    box.className = "menu-error";
+    box.setAttribute("role", "alert");
+    box.append($(".empty .sad-cookie").cloneNode(true));
+    box.insertAdjacentHTML("beforeend", `
+      <p class="menu-error__title">Ops! Não conseguimos carregar o cardápio.</p>
+      <p class="menu-error__text">Confira sua internet e tente de novo.</p>
+      <button class="btn btn--dark" type="button">tentar de novo</button>`);
+    $("button", box).addEventListener("click", () => location.reload());
+    section.append(box);
+  });
+}
+
+async function loadJSON(url) {
+  const response = await fetch(versioned(url), { cache: "no-cache" });
+  if (!response.ok) throw new Error(`${url}: ${response.status}`);
+  return response.json();
+}
+
+async function checkForUpdate() {
+  if (BUILD === "dev") return;
+  try {
+    const response = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
+    const { build } = await response.json();
+    if (!build || build === BUILD || session.get(RELOADED_KEY) === build) return;
+    session.set(RELOADED_KEY, build);
+    location.reload();
+  } catch {}
+}
+
 async function init() {
   document.body.dataset.screen = "inicio";
   $('.dots__item[data-target="inicio"]').classList.add("is-active");
+  checkForUpdate();
   playIntro();
 
-  const [menu, config] = await Promise.all([
-    fetch("menu.json").then((r) => r.json()),
-    fetch("config.json").then((r) => r.json()),
-  ]);
-  state.menu = menu;
-  renderDates(config.datasEntrega);
-  state.showcases = [...document.querySelectorAll("[data-showcase]")].map(createShowcase);
+  try {
+    const [menu, config] = await Promise.all([loadJSON("menu.json"), loadJSON("config.json")]);
+    state.menu = menu;
+    applyConfig(config);
+    state.showcases = [...document.querySelectorAll("[data-showcase]")].map(createShowcase);
+  } catch {
+    showMenuError();
+  }
 
   bindEvents();
   observeScreens();
