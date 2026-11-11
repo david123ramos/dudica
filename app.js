@@ -229,6 +229,12 @@ function renderSummary() {
 
   el.total._value = 0;
   tween(el.total, cartTotal(), 900);
+  syncListFade();
+}
+
+function syncListFade() {
+  const { scrollTop, scrollHeight, clientHeight } = el.list;
+  el.list.classList.toggle("has-more", scrollHeight - scrollTop - clientHeight > 4);
 }
 
 function stepLine(line, delta) {
@@ -241,6 +247,7 @@ function stepLine(line, delta) {
     line.addEventListener("animationend", () => {
       line.remove();
       el.ticket.classList.toggle("is-empty", cartItems().length === 0);
+      syncListFade();
     }, { once: true });
   } else {
     const qtyNode = $(".line__qty", line);
@@ -624,6 +631,9 @@ function bindEvents() {
 
   document.querySelectorAll("[data-target], [data-goto]").forEach((btn) =>
     btn.addEventListener("click", () => scrollToScreen(btn.dataset.target || btn.dataset.goto)));
+
+  el.list.addEventListener("scroll", syncListFade, { passive: true });
+  addEventListener("resize", syncListFade);
 
   el.list.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-step]");

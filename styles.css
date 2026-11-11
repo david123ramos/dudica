@@ -669,9 +669,14 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 }
 
 /* 3. Resumo */
-.summary { background: var(--bg-summary); justify-content: flex-start; }
+.summary { height: 100dvh; background: var(--bg-summary); justify-content: flex-start; }
+.summary > * { flex: none; }
 .ticket {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+  min-height: 0;
   margin-top: 18px;
   padding: 22px 20px 26px;
   background: var(--surface);
@@ -689,7 +694,20 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
     linear-gradient(-45deg, transparent 8px, var(--surface) 0) 0 0 / 16px 12px repeat-x,
     linear-gradient(45deg, transparent 8px, var(--surface) 0) 0 0 / 16px 12px repeat-x;
 }
-.ticket__list { list-style: none; margin: 0; padding: 0; }
+.ticket__list {
+  min-height: 0;
+  margin: 0 -8px 0 0;
+  padding: 0 8px 0 0;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.ticket__list.has-more {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
+}
 
 .line {
   display: grid;
@@ -1167,8 +1185,13 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   .want { margin-top: 18px; }
   .btn { min-height: 52px; }
   .want__counter { flex-basis: 52px; width: 52px; height: 52px; }
-  .ticket { margin-top: 12px; }
+  .ticket { margin-top: 12px; padding: 16px 18px 20px; }
   .summary__next { margin-top: 28px; }
+  .line { grid-template-columns: 44px 1fr auto; column-gap: 12px; padding: 10px 0; }
+  .line__art { width: 44px; height: 44px; }
+  .line__step button { width: 28px; height: 28px; }
+  .ticket__total { margin-top: 12px; }
+  .ticket__total strong { font-size: 1.6rem; }
 
   .form-screen { padding-top: calc(env(safe-area-inset-top) + 24px); }
   .form-screen .screen__title { font-size: clamp(1.55rem, 7vw, 2.1rem); }
@@ -1191,6 +1214,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   .product__desc { font-size: .82rem; line-height: 1.35; }
   .product__price { font-size: 1.1rem; }
   .want { margin-top: 12px; }
+  .summary__next { margin-top: 22px; }
 
   body[data-screen="dados"] .minicart { opacity: 0; pointer-events: none; }
   .form-screen { padding-top: calc(env(safe-area-inset-top) + 16px); }
