@@ -66,14 +66,14 @@ function spawnHearts(target, amount = 4) {
   }
 }
 
-function enableSwipe(viewport, track, getIndex, count, goTo) {
+function enableSwipe(area, getIndex, count, goTo) {
   let startX = 0;
   let startY = 0;
   let startTime = 0;
   let dx = 0;
   let axis = null;
 
-  viewport.addEventListener("pointerdown", (e) => {
+  area.addEventListener("pointerdown", (e) => {
     startX = e.clientX;
     startY = e.clientY;
     startTime = performance.now();
@@ -81,7 +81,7 @@ function enableSwipe(viewport, track, getIndex, count, goTo) {
     axis = null;
   });
 
-  viewport.addEventListener("pointermove", (e) => {
+  area.addEventListener("pointermove", (e) => {
     if (e.pointerType === "mouse" && e.buttons !== 1) return;
     const moveX = e.clientX - startX;
     const moveY = e.clientY - startY;
@@ -89,8 +89,8 @@ function enableSwipe(viewport, track, getIndex, count, goTo) {
     if (!axis && Math.hypot(moveX, moveY) > 8) {
       axis = Math.abs(moveX) > Math.abs(moveY) ? "x" : "y";
       if (axis === "x") {
-        viewport.setPointerCapture(e.pointerId);
-        track.classList.add("is-dragging");
+        area.setPointerCapture(e.pointerId);
+        area.classList.add("is-dragging");
       }
     }
     if (axis !== "x") return;
@@ -98,20 +98,20 @@ function enableSwipe(viewport, track, getIndex, count, goTo) {
     const index = getIndex();
     const atEdge = (index === 0 && moveX > 0) || (index === count - 1 && moveX < 0);
     dx = atEdge ? moveX * 0.3 : moveX;
-    track.style.setProperty("--drag", `${dx}px`);
+    area.style.setProperty("--drag", `${dx}px`);
   });
 
   const release = () => {
     if (axis !== "x") return;
     const velocity = Math.abs(dx) / (performance.now() - startTime);
-    track.classList.remove("is-dragging");
-    track.style.setProperty("--drag", "0px");
-    if (Math.abs(dx) > viewport.offsetWidth * 0.18 || velocity > 0.5) goTo(getIndex() + (dx < 0 ? 1 : -1));
+    area.classList.remove("is-dragging");
+    area.style.setProperty("--drag", "0px");
+    if (Math.abs(dx) > area.offsetWidth * 0.18 || velocity > 0.5) goTo(getIndex() + (dx < 0 ? 1 : -1));
     axis = null;
   };
 
-  viewport.addEventListener("pointerup", release);
-  viewport.addEventListener("pointercancel", release);
+  area.addEventListener("pointerup", release);
+  area.addEventListener("pointercancel", release);
 }
 
 function createShowcase(section) {
@@ -120,7 +120,7 @@ function createShowcase(section) {
 
   const ui = {
     track: $(".carousel__track", section),
-    viewport: $(".carousel__viewport", section),
+    swipe: $(".swipe", section),
     prev: $(".carousel__arrow--prev", section),
     next: $(".carousel__arrow--next", section),
     pager: $(".pager", section),
@@ -183,7 +183,7 @@ function createShowcase(section) {
     spawnHearts(ui.counter);
     updateCart();
   });
-  enableSwipe(ui.viewport, ui.track, () => index, items.length, goTo);
+  enableSwipe(ui.swipe, () => index, items.length, goTo);
 
   goTo(0, false);
   return { id: section.id, step: (delta) => goTo(index + delta), refresh: () => refresh(false) };

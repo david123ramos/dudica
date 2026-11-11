@@ -415,11 +415,22 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
     var(--bg-brownies);
 }
 
-.carousel { position: relative; margin-top: 4px; touch-action: pan-y; }
+.swipe {
+  --drag: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+.swipe.is-dragging { cursor: grabbing; }
+.swipe.is-dragging :is(.carousel__track, .product > *) { transition: none; }
+.carousel { position: relative; margin-top: 4px; }
 .carousel__viewport { overflow: hidden; padding: 12px 0 22px; }
 .carousel__track {
   --index: 0;
-  --drag: 0px;
   display: flex;
   margin: 0;
   padding: 0;
@@ -428,7 +439,6 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
   transition: transform .75s var(--ease-out);
   will-change: transform;
 }
-.carousel__track.is-dragging { transition: none; }
 
 .slide {
   flex: 0 0 64%;
@@ -496,6 +506,7 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 .carousel__arrow:disabled { opacity: 0; pointer-events: none; }
 
 .product { text-align: center; min-height: 128px; }
+.product > * { translate: calc(var(--drag) * .35) 0; transition: translate .6s var(--ease-out); }
 .product.is-swapping > * { animation: swap .6s var(--ease-out) both; }
 .product.is-swapping > :nth-child(2) { animation-delay: 50ms; }
 .product.is-swapping > :nth-child(3) { animation-delay: 100ms; }

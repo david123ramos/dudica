@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..900,100&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
   <nav class="dots" aria-label="Progresso">
@@ -209,21 +209,23 @@
   </main>
 
   <template id="showcase">
-    <div class="carousel" data-reveal style="--i:1">
-      <button class="carousel__arrow carousel__arrow--prev" aria-label="Produto anterior"></button>
-      <div class="carousel__viewport">
-        <ul class="carousel__track"></ul>
+    <div class="swipe">
+      <div class="carousel" data-reveal style="--i:1">
+        <button class="carousel__arrow carousel__arrow--prev" aria-label="Produto anterior"></button>
+        <div class="carousel__viewport">
+          <ul class="carousel__track"></ul>
+        </div>
+        <button class="carousel__arrow carousel__arrow--next" aria-label="Próximo produto"></button>
       </div>
-      <button class="carousel__arrow carousel__arrow--next" aria-label="Próximo produto"></button>
-    </div>
 
-    <div class="product" data-reveal style="--i:2" aria-live="polite">
-      <h3 class="product__name"></h3>
-      <p class="product__desc"></p>
-      <p class="product__price"></p>
-    </div>
+      <div class="product" data-reveal style="--i:2" aria-live="polite">
+        <h3 class="product__name"></h3>
+        <p class="product__desc"></p>
+        <p class="product__price"></p>
+      </div>
 
-    <div class="pager" aria-hidden="true"></div>
+      <div class="pager" aria-hidden="true"></div>
+    </div>
 
     <div class="want" data-reveal style="--i:3">
       <button class="btn btn--primary want__btn">
@@ -246,6 +248,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=8" defer></script>
+  <script src="app.js?v=9" defer></script>
 </body>
 </html>
