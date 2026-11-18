@@ -386,15 +386,17 @@ const validators = {
   nome: (v) => v.trim().length >= 2,
   telefone: (v) => v.replace(/\D/g, "").length >= 10,
   data: (v) => v !== "",
+  pagamento: (v) => v !== "",
 };
 
 function validate() {
   let firstInvalid = null;
   Object.entries(validators).forEach(([name, isValid]) => {
-    const input = el.form.elements[name];
+    const control = el.form.elements[name];
+    const input = control instanceof RadioNodeList ? control[0] : control;
     const field = input.closest(".field");
     field.classList.remove("is-invalid");
-    if (!isValid(input.value)) {
+    if (!isValid(control.value)) {
       void field.offsetWidth;
       field.classList.add("is-invalid");
       firstInvalid ??= input;
@@ -426,7 +428,25 @@ function buildMessage(data, number) {
     `*Nome:* ${data.nome.trim()}`,
     `*Telefone:* ${data.telefone}`,
     `*Entrega:* ${formatDate(data.data)}`,
+    `*Pagamento:* ${paymentLabel(data.pagamento)}`,
   ].join("\n");
+}
+
+function paymentLabel(name) {
+  const option = (state.config.pagamentos ?? []).find((p) => p.nome === name);
+  return option?.observacao ? `${name} (${option.observacao.charAt(0).toLowerCase()}${option.observacao.slice(1)})` : name;
+}
+
+const escapeHTML = (text) => String(text).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+function renderPayments(options) {
+  if (!options?.length) return;
+  $("#pay-options").innerHTML = options.map((p) => `
+    <label class="pay__option">
+      <input type="radio" name="pagamento" value="${escapeHTML(p.nome)}" required>
+      <span class="pay__name">${escapeHTML(p.nome)}</span>
+      ${p.observacao ? `<small class="pay__note">${escapeHTML(p.observacao)}</small>` : ""}
+    </label>`).join("");
 }
 
 function openThanks(origin, url, name, number) {
@@ -763,6 +783,7 @@ function loadStats(code) {
 function applyConfig(config) {
   state.config = config;
   renderDates(config.datasEntrega ?? []);
+  renderPayments(config.pagamentos);
   if (config.textos?.entrega) $(".info__text").textContent = config.textos.entrega;
   renderFooter(config);
   loadStats(config.estatisticas?.goatcounter);

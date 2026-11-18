@@ -8,6 +8,10 @@
     "saudacaoPedido": "Olá, Dudica! 🍪 Quero fazer um pedido:",
     "esgotado": "esgotado por enquanto"
   },
+  "pagamentos": [
+    { "nome": "Pix" },
+    { "nome": "Crédito", "observacao": "Via link de pagamento, com taxa inclusa" }
+  ],
   "estatisticas": {
     "goatcounter": "dudica"
   },

@@ -180,6 +180,22 @@
           </div>
         </div>
 
+        <fieldset class="field pay">
+          <legend class="pay__legend">Forma de pagamento</legend>
+          <div class="pay__options" id="pay-options">
+            <label class="pay__option">
+              <input type="radio" name="pagamento" value="Pix" required>
+              <span class="pay__name">Pix</span>
+            </label>
+            <label class="pay__option">
+              <input type="radio" name="pagamento" value="Crédito" required>
+              <span class="pay__name">Crédito</span>
+              <small class="pay__note">Via link de pagamento, com taxa inclusa</small>
+            </label>
+          </div>
+          <span class="field__error">Escolha como vai pagar</span>
+        </fieldset>
+
         <p class="form__warn" id="form-warn" role="alert"></p>
 
         <button class="btn btn--brownie" id="brownie-btn" type="submit">
