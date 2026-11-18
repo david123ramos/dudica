@@ -392,11 +392,10 @@ const validators = {
 function validate() {
   let firstInvalid = null;
   Object.entries(validators).forEach(([name, isValid]) => {
-    const control = el.form.elements[name];
-    const input = control instanceof RadioNodeList ? control[0] : control;
+    const input = el.form.elements[name];
     const field = input.closest(".field");
     field.classList.remove("is-invalid");
-    if (!isValid(control.value)) {
+    if (!isValid(input.value)) {
       void field.offsetWidth;
       field.classList.add("is-invalid");
       firstInvalid ??= input;
@@ -441,12 +440,16 @@ const escapeHTML = (text) => String(text).replace(/[&<>"']/g, (c) => `&#${c.char
 
 function renderPayments(options) {
   if (!options?.length) return;
-  $("#pay-options").innerHTML = options.map((p) => `
-    <label class="pay__option">
-      <input type="radio" name="pagamento" value="${escapeHTML(p.nome)}" required>
-      <span class="pay__name">${escapeHTML(p.nome)}</span>
-      ${p.observacao ? `<small class="pay__note">${escapeHTML(p.observacao)}</small>` : ""}
-    </label>`).join("");
+  const select = $("#pay-select");
+  select.querySelectorAll("option:not([disabled])").forEach((o) => o.remove());
+  select.insertAdjacentHTML("beforeend", options.map((p) => `<option value="${escapeHTML(p.nome)}">${escapeHTML(p.nome)}</option>`).join(""));
+}
+
+function updatePaymentHint() {
+  const hint = $("#pay-hint");
+  const option = (state.config.pagamentos ?? []).find((p) => p.nome === el.form.elements.pagamento.value);
+  hint.textContent = option?.observacao ?? "";
+  hint.hidden = !option?.observacao;
 }
 
 function openThanks(origin, url, name, number) {
@@ -470,7 +473,7 @@ function closeThanks() {
   mascot.setMood("idle");
 }
 
-const MOOD_BY_FIELD = { nome: "typing", telefone: "focus", data: "think" };
+const MOOD_BY_FIELD = { nome: "typing", telefone: "focus", data: "think", pagamento: "think" };
 
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" });
 
@@ -680,6 +683,8 @@ function bindForm() {
 
   const phone = el.form.elements.telefone;
   phone.addEventListener("input", () => { phone.value = maskPhone(phone.value); });
+
+  el.form.elements.pagamento.addEventListener("change", updatePaymentHint);
 
   el.form.addEventListener("input", (e) => {
     if (validators[e.target.name]?.(e.target.value)) e.target.closest(".field").classList.remove("is-invalid");

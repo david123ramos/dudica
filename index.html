@@ -172,6 +172,16 @@
           <span class="field__label">Data de entrega</span>
           <span class="field__error">Escolha uma data de entrega</span>
         </label>
+        <label class="field field--select">
+          <select class="field__input" name="pagamento" id="pay-select" required>
+            <option value="" disabled selected>Escolha como vai pagar</option>
+            <option value="Pix">Pix</option>
+            <option value="Crédito">Crédito</option>
+          </select>
+          <span class="field__label">Forma de pagamento</span>
+          <span class="field__hint" id="pay-hint" hidden></span>
+          <span class="field__error">Escolha a forma de pagamento</span>
+        </label>
         <div class="field">
           <div class="field__input info" role="note">
             <span class="info__icon" aria-hidden="true">!</span>
@@ -179,22 +189,6 @@
             <p class="info__text">As entregas são feitas via Uber Flash ou 99Entregas, somente nas datas disponíveis. Avisaremos quando tudo estiver prontinho e você solicita a corrida. Se escolher retirar, é só combinar o horário com a gente!</p>
           </div>
         </div>
-
-        <fieldset class="field pay">
-          <legend class="pay__legend">Forma de pagamento</legend>
-          <div class="pay__options" id="pay-options">
-            <label class="pay__option">
-              <input type="radio" name="pagamento" value="Pix" required>
-              <span class="pay__name">Pix</span>
-            </label>
-            <label class="pay__option">
-              <input type="radio" name="pagamento" value="Crédito" required>
-              <span class="pay__name">Crédito</span>
-              <small class="pay__note">Via link de pagamento, com taxa inclusa</small>
-            </label>
-          </div>
-          <span class="field__error">Escolha como vai pagar</span>
-        </fieldset>
 
         <p class="form__warn" id="form-warn" role="alert"></p>
 

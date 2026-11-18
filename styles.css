@@ -966,40 +966,8 @@ body[data-screen="inicio"] .dots__item.is-active { background: var(--accent); }
 }
 .field--select select:invalid { color: var(--ink-soft); }
 
-.pay { min-width: 0; margin: 0; padding: 0; border: 0; }
-.pay__legend { padding: 0 4px; margin-bottom: 6px; font-size: .74rem; font-weight: 700; color: var(--ink); }
-.pay__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-.pay__option {
-  position: relative;
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  padding: 14px 14px 12px;
-  border: 2px solid var(--ink);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  cursor: pointer;
-  touch-action: manipulation;
-  transition: background var(--dur-fast), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
-}
-.pay__option input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
-.pay__name { display: flex; align-items: center; gap: 10px; font-weight: 700; }
-.pay__name::before {
-  content: "";
-  flex: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--ink);
-  border-radius: 50%;
-  background: var(--surface);
-  transition: box-shadow var(--dur-fast) var(--ease-spring);
-}
-.pay__note { font-size: .78rem; line-height: 1.3; color: var(--ink-soft); }
-.pay__option:has(input:checked) { background: color-mix(in srgb, var(--accent) 30%, var(--surface)); box-shadow: 0 4px 0 var(--ink); transform: translateY(-2px); }
-.pay__option:has(input:checked) .pay__name::before { box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 9px var(--ink); }
-.pay__option:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
-.field.is-invalid .pay__option { border-color: var(--danger); }
-.field.is-invalid .pay__options { animation: shake .4s var(--ease-out); }
+.field__hint { display: block; margin-top: 6px; padding-left: 4px; font-size: .82rem; font-weight: 700; color: var(--ink-soft); }
+.field__hint[hidden] { display: none; }
 
 .form__warn:empty { display: none; }
 .form__warn { margin: 0; min-height: 1.2em; text-align: center; font-size: .9rem; color: var(--danger); font-weight: 700; }
