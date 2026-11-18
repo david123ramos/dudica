@@ -4,7 +4,7 @@
     "categoria": "cookies",
     "nome": "Cookie Tradicional",
     "descricao": "Crocante por fora, macio por dentro e com gotas generosas de chocolate belga.",
-    "preco": 8,
+    "preco": 14,
     "disponivel": true,
     "imagem": "static/prods/cookie_tradicional.png",
     "arte": "cookie"
@@ -14,7 +14,7 @@
     "categoria": "cookies",
     "nome": "Cookie Dark Duo",
     "descricao": "Nossa receita de cookie agora com massa de cacau 100% e pedaços de chocolate ao leite e chocolate branco",
-    "preco": 8,
+    "preco": 15,
     "disponivel": true,
     "imagem": "static/prods/cookie_dark_duo.png",
     "arte": "cookie"
@@ -24,7 +24,7 @@
     "categoria": "cookies",
     "nome": "Cookie Red Velvet",
     "descricao": "Massa aveludada de cacau, gotas de chocolate branco e recheio de brigadeiro & cream cheese.",
-    "preco": 9,
+    "preco": 17,
     "disponivel": true,
     "imagem": "static/prods/cookie_redvelvet.png",
     "arte": "redvelvet"
@@ -34,7 +34,7 @@
     "categoria": "cookies",
     "nome": "Cookie Bueno",
     "descricao": "Nossa receita de cookie agora com recheio de kinder bueno e gotas de chocolate branco",
-    "preco": 9,
+    "preco": 18,
     "disponivel": true,
     "imagem": "static/prods/cookie_kinderbueno.png",
     "arte": "redvelvet"
@@ -44,7 +44,7 @@
     "categoria": "cookies",
     "nome": "Cookie Nutella",
     "descricao": "Nossa receita de cookie agora com recheio generoso de Nutella®",
-    "preco": 9,
+    "preco": 18,
     "disponivel": true,
     "imagem": "static/prods/cookie_nutella.png",
     "arte": "redvelvet"
@@ -54,7 +54,7 @@
     "categoria": "brownies",
     "nome": "Brownie",
     "descricao": "Casquinha craquelada e um miolo úmido, denso e intensamente chocolatudo.",
-    "preco": 10,
+    "preco": 12.50,
     "disponivel": true,
     "imagem": "static/prods/brownie_tradicional.png",
     "arte": "brownie"
@@ -64,7 +64,7 @@
     "categoria": "brownies",
     "nome": "Brookie",
     "descricao": "O melhor dos dois mundos: metade brownie, metade cookie, inteiro amor.",
-    "preco": 12,
+    "preco": 14,
     "disponivel": true,
     "imagem": "static/prods/brookie.png",
     "arte": "brookie"
