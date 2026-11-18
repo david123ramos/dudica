@@ -454,10 +454,12 @@ const MOOD_BY_FIELD = { nome: "typing", telefone: "focus", data: "think" };
 
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" });
 
-function formatDate(iso) {
-  const [year, month, day] = iso.split("-").map(Number);
+function formatDate(value) {
+  const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})\s*(.*)$/);
+  if (!match) return String(value);
+  const [, year, month, day, extra] = match;
   const label = dateFormat.format(new Date(year, month - 1, day));
-  return label.charAt(0).toUpperCase() + label.slice(1);
+  return `${label.charAt(0).toUpperCase()}${label.slice(1)}${extra ? ` ${extra}` : ""}`;
 }
 
 function renderDates(dates) {
