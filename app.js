@@ -331,7 +331,7 @@ function setScreen(id) {
   document.body.dataset.screen = id;
   document.querySelectorAll(".dots__item").forEach((d) => d.classList.toggle("is-active", d.dataset.target === id));
   if (id === "resumo") renderSummary();
-  if (id === "dados") setTimeout(() => mascot.setMood("wink", 1200), 700);
+  if (id === "dados" && $("#closed").hidden) setTimeout(() => mascot.setMood("wink", 1200), 700);
   if (id !== "inicio") trackOnce(`viu/${id}`);
   maybeHintSwipe(id);
   syncMinicart();
@@ -485,14 +485,54 @@ function formatDate(value) {
   return `${label.charAt(0).toUpperCase()}${label.slice(1)}${extra ? ` ${extra}` : ""}`;
 }
 
-function renderDates(dates) {
-  const select = el.form.elements.data;
+function parseDeadline(value) {
+  const match = String(value ?? "").trim().match(/^(\d{4}-\d{2}-\d{2})[ T](\d{1,2}):(\d{2})$/);
+  if (!match) return null;
+  const date = new Date(`${match[1]}T${match[2].padStart(2, "0")}:${match[3]}:00-03:00`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function availableDates(entries = state.config.datasEntrega ?? []) {
   const now = new Date();
   const today = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
-  const upcoming = dates.filter((iso) => iso >= today).sort();
+  return entries
+    .map((entry) => (typeof entry === "string" ? { data: entry } : entry))
+    .filter((entry) => {
+      if (!entry?.data) return false;
+      const deadline = parseDeadline(entry.vencimento);
+      return deadline ? now < deadline : entry.data.slice(0, 10) >= today;
+    })
+    .map((entry) => entry.data)
+    .sort();
+}
 
-  select.firstElementChild.textContent = upcoming.length ? "Escolha uma data" : "Sem datas disponíveis no momento";
-  select.insertAdjacentHTML("beforeend", upcoming.map((iso) => `<option value="${iso}">${formatDate(iso)}</option>`).join(""));
+function renderDates() {
+  const select = el.form.elements.data;
+  const chosen = select.value;
+  const upcoming = availableDates();
+  select.querySelectorAll("option:not([disabled])").forEach((option) => option.remove());
+  select.insertAdjacentHTML("beforeend", upcoming.map((value) => `<option value="${escapeHTML(value)}">${escapeHTML(formatDate(value))}</option>`).join(""));
+  if (upcoming.includes(chosen)) select.value = chosen;
+  else select.selectedIndex = 0;
+  setOrdersClosed(!upcoming.length);
+}
+
+function renderClosed({ instagram, textos = {} }) {
+  if (textos.encerrado) $("#closed-text").textContent = textos.encerrado;
+  const link = $("#closed-instagram");
+  link.hidden = !instagram;
+  if (instagram) {
+    link.href = `https://instagram.com/${instagram}`;
+    $(".closed__handle", link).textContent = `@${instagram}`;
+  }
+}
+
+function setOrdersClosed(closed) {
+  const box = $("#closed");
+  if (box.hidden === !closed) return;
+  box.hidden = !closed;
+  el.form.hidden = closed;
+  mascot.setBase(closed ? "sad" : "idle");
 }
 
 function caretPoint(field) {
@@ -700,6 +740,8 @@ function bindForm() {
   el.form.addEventListener("submit", (e) => {
     e.preventDefault();
     el.warn.textContent = "";
+    renderDates();
+    if (!$("#closed").hidden) return;
 
     const invalid = validate();
     if (invalid) {
@@ -726,6 +768,7 @@ function bindForm() {
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible") return;
+    renderDates();
     if (state.sent) setTimeout(closeThanks, 600);
     else if (cartCount() === 0) checkForUpdate();
   });
@@ -787,7 +830,9 @@ function loadStats(code) {
 
 function applyConfig(config) {
   state.config = config;
-  renderDates(config.datasEntrega ?? []);
+  renderDates();
+  renderClosed(config);
+  setInterval(renderDates, 30000);
   renderPayments(config.pagamentos);
   if (config.textos?.entrega) $(".info__text").textContent = config.textos.entrega;
   renderFooter(config);

@@ -6,7 +6,8 @@
   "textos": {
     "entrega": "As entregas são feitas via Uber Flash ou 99Entregas, somente nas datas disponíveis. Avisaremos quando tudo estiver prontinho e você solicita a corrida. Se escolher retirar, é só combinar o horário com a gente!",
     "saudacaoPedido": "Olá, Dudica! 🍪 Quero fazer um pedido:",
-    "esgotado": "esgotado por enquanto"
+    "esgotado": "esgotado por enquanto",
+    "encerrado": "Os pedidos desta semana já se encerraram. Acompanhe nosso Instagram para saber quando abrirem as próximas datas!"
   },
   "pagamentos": [
     { "nome": "Pix" },
@@ -16,7 +17,7 @@
     "goatcounter": "dudica"
   },
   "datasEntrega": [
-    "2026-11-20 (Manhã)",
-    "2026-11-21 (Manhã)"
+    { "data": "2026-11-20 (Manhã)", "vencimento": "2026-11-19 13:00" },
+    { "data": "2026-11-21 (Manhã)", "vencimento": "2026-11-20 13:00" }
   ]
 }
