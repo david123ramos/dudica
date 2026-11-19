@@ -17,7 +17,7 @@ const store = (area) => ({
 const local = store(() => localStorage);
 const session = store(() => sessionStorage);
 
-const state = { menu: [], config: {}, cart: {}, screen: "inicio", sent: false, showcases: [], seen: new Set() };
+const state = { menu: [], config: {}, cart: {}, screen: "inicio", sent: false, ordersClosed: false, showcases: [], seen: new Set() };
 
 const el = {
   feed: $("#feed"),
@@ -175,13 +175,14 @@ function createShowcase(section) {
   function refresh(animate) {
     const item = items[index];
     const soldOut = isSoldOut(item);
+    const blocked = soldOut || state.ordersClosed;
     const qty = qtyOf(item.id);
     const label = soldOut
       ? state.config.textos?.esgotado ?? "esgotado por enquanto"
-      : qty > 0 ? "quero mais um desse!" : "quero um desse!";
+      : state.ordersClosed ? state.config.textos?.botaoEncerrado ?? "pedidos encerrados" : qty > 0 ? "quero mais um desse!" : "quero um desse!";
 
-    ui.want.disabled = soldOut;
-    ui.want.parentElement.classList.toggle("is-soldout", soldOut);
+    ui.want.disabled = blocked;
+    ui.want.parentElement.classList.toggle("is-soldout", blocked);
     if (ui.label.textContent !== label) {
       ui.label.textContent = label;
       restart(ui.label, "is-changing");
@@ -222,7 +223,7 @@ function createShowcase(section) {
   ui.next.addEventListener("click", () => goTo(index + 1));
   ui.want.addEventListener("click", () => {
     const item = items[index];
-    if (isSoldOut(item)) return;
+    if (isSoldOut(item) || state.ordersClosed) return;
     state.cart[item.id] = qtyOf(item.id) + 1;
     refresh(true);
     spawnHearts(ui.counter);
@@ -492,7 +493,7 @@ function parseDeadline(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function availableDates(entries = state.config.datasEntrega ?? []) {
+function availableEntries(entries = state.config.datasEntrega ?? []) {
   const now = new Date();
   const today = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
   return entries
@@ -501,9 +502,73 @@ function availableDates(entries = state.config.datasEntrega ?? []) {
       if (!entry?.data) return false;
       const deadline = parseDeadline(entry.vencimento);
       return deadline ? now < deadline : entry.data.slice(0, 10) >= today;
-    })
-    .map((entry) => entry.data)
-    .sort();
+    });
+}
+
+const availableDates = () => availableEntries().map((entry) => entry.data).sort();
+
+const RECIFE = "America/Recife";
+const dayKey = new Intl.DateTimeFormat("en-CA", { timeZone: RECIFE });
+const weekdayName = new Intl.DateTimeFormat("pt-BR", { timeZone: RECIFE, weekday: "long" });
+const clock = new Intl.DateTimeFormat("pt-BR", { timeZone: RECIFE, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+
+function deadlineText(date) {
+  const [hours, minutes] = clock.format(date).split(":");
+  const time = `${Number(hours)}h${minutes === "00" ? "" : minutes}`;
+  const now = new Date();
+  const day = dayKey.format(date);
+  if (day === dayKey.format(now)) return `hoje, ${time}`;
+  if (day === dayKey.format(new Date(now.getTime() + 864e5))) return `amanhã, ${time}`;
+  return `${weekdayName.format(date).replace("-feira", "")}, ${time}`;
+}
+
+function orderWindow() {
+  const open = availableEntries();
+  if (!open.length) return { status: "closed" };
+  const deadlines = open.map((entry) => parseDeadline(entry.vencimento));
+  if (deadlines.some((d) => !d)) return { status: "open" };
+  const deadline = new Date(Math.max(...deadlines));
+  const left = deadline - new Date();
+  return { status: left <= 864e5 ? "closing" : "open", deadline, left };
+}
+
+function countdownText(ms) {
+  const minutes = Math.max(1, Math.ceil(ms / 6e4));
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return h ? `${h}h${m ? String(m).padStart(2, "0") : ""}` : `${m} min`;
+}
+
+function renderOrderStatus() {
+  const win = orderWindow();
+  const badge = $("#order-status");
+  const text = $(".order-status__text", badge);
+  const reminder = $("#summary-deadline");
+  const instagram = state.config.instagram;
+  badge.dataset.status = win.status;
+  badge.hidden = false;
+  badge.removeAttribute("href");
+
+  if (win.status === "closed") {
+    text.textContent = state.config.textos?.encerradoCurto ?? "Pedidos desta semana encerrados";
+    if (instagram) badge.href = `https://instagram.com/${instagram}`;
+  } else if (!win.deadline) {
+    text.textContent = "Pedidos abertos";
+  } else if (win.left <= 3 * 36e5) {
+    text.textContent = `Últimas horas! Faltam ${countdownText(win.left)} para encerrar`;
+  } else if (win.status === "closing") {
+    text.textContent = `Corre! Pedidos encerram ${deadlineText(win.deadline)}`;
+  } else {
+    text.textContent = `Pedidos abertos até ${deadlineText(win.deadline)}`;
+  }
+
+  reminder.hidden = !win.deadline;
+  if (win.deadline) {
+    reminder.dataset.status = win.status;
+    $("span", reminder).textContent = win.left <= 3 * 36e5
+      ? `Faltam ${countdownText(win.left)} para encerrar os pedidos`
+      : `Peça até ${deadlineText(win.deadline)}`;
+  }
 }
 
 function renderDates() {
@@ -515,6 +580,7 @@ function renderDates() {
   if (upcoming.includes(chosen)) select.value = chosen;
   else select.selectedIndex = 0;
   setOrdersClosed(!upcoming.length);
+  renderOrderStatus();
 }
 
 function renderClosed({ instagram, textos = {} }) {
@@ -529,7 +595,9 @@ function renderClosed({ instagram, textos = {} }) {
 
 function setOrdersClosed(closed) {
   const box = $("#closed");
+  state.ordersClosed = closed;
   if (box.hidden === !closed) return;
+  state.showcases.forEach((s) => s.refresh());
   box.hidden = !closed;
   el.form.hidden = closed;
   mascot.setBase(closed ? "sad" : "idle");

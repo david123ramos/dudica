@@ -72,6 +72,12 @@
 
       <h1 class="splash__title" data-intro style="--i:0">Peça seu <em>docinho.</em></h1>
       <p class="splash__text" data-intro style="--i:1">Cookies, brownies e brookies.</p>
+      <div class="order-status-wrap" data-intro style="--i:2">
+        <a class="order-status" id="order-status" target="_blank" rel="noopener" hidden>
+          <span class="order-status__dot" aria-hidden="true"></span>
+          <span class="order-status__text"></span>
+        </a>
+      </div>
       <div class="hint" data-intro style="--i:3" aria-hidden="true">
         <span class="hint__chevron"></span>
         <span>deslize pra cima</span>
@@ -112,6 +118,7 @@
           <strong id="summary-total">R$ 0,00</strong>
         </footer>
       </div>
+      <p class="summary__deadline" id="summary-deadline" data-reveal style="--i:2" hidden><b aria-hidden="true">⏰</b> <span></span></p>
       <button class="btn btn--dark summary__next" data-goto="dados" data-reveal style="--i:2">tudo certo, continuar</button>
     </section>
 
