@@ -21,6 +21,6 @@
   "datasEntrega": [
     { "data": "2026-11-26 (Tarde)", "vencimento": "2026-11-25 17:00" },
     { "data": "2026-11-27 (Tarde)", "vencimento": "2026-11-26 13:00" },
-    { "data": "2026-11-28 (Manhã)", "vencimento": "2026-11-27 13:00" }
+    { "data": "2026-11-28 (Manhã)", "vencimento": "2026-11-27 14:00" }
   ]
 }
